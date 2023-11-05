@@ -6,29 +6,21 @@ import {
 	update,
 	onValue,
 } from 'https://www.gstatic.com/firebasejs/10.5.2/firebase-database.js';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-	apiKey: 'AIzaSyDU7HjH3cAn_2EbQXs7O6JYTRYb1u3WYu0',
-	authDomain: 'esp32-rtdb-tutorial.firebaseapp.com',
-	databaseURL: 'https://esp32-rtdb-tutorial-default-rtdb.firebaseio.com',
-	projectId: 'esp32-rtdb-tutorial',
-	storageBucket: 'esp32-rtdb-tutorial.appspot.com',
-	messagingSenderId: '216960855948',
-	appId: '1:216960855948:web:1e6335906384f79655f0a9',
-};
+// TODO: Add your web app's Firebase configuration
+const firebaseConfig = {};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
-const ldrValueRef = ref(db, 'Sensor/ldr_data');
-const ldrVoltageRef = ref(db, 'Sensor/voltage');
-const ledAnalogRef = ref(db, 'LED/analog');
-const ledDigitalRef = ref(db, 'LED/digital');
+
+// TODO: Add paths for the values you refer to from the database
+const ldrValueRef = ref(db, '');
+const ldrVoltageRef = ref(db, '');
+const ledAnalogRef = ref(db, '');
+const ledDigitalRef = ref(db, '');
 
 onValue(ldrValueRef, (snapshot) => {
 	const value = snapshot.val();
@@ -54,7 +46,9 @@ onValue(ledAnalogRef, (snapshot) => {
 });
 
 document.getElementById('ledOn').onclick = (event) => {
-	update(ref(db), { 'LED/digital': true })
+	update(ref(db), {
+		/* TODO: Add appropriate path as the key and the value you want to set it to */
+	})
 		.then(() => {
 			console.log('LED Digital Write: OK: ON');
 		})
@@ -63,7 +57,9 @@ document.getElementById('ledOn').onclick = (event) => {
 		});
 };
 document.getElementById('ledOff').onclick = (event) => {
-	update(ref(db), { 'LED/digital': false })
+	update(ref(db), {
+		/* TODO: Add appropriate path as the key and the value you want to set it to */
+	})
 		.then(() => {
 			console.log('LED Digital Write: OK: ON');
 		})
@@ -73,7 +69,9 @@ document.getElementById('ledOff').onclick = (event) => {
 };
 document.getElementById('ledSlider').onchange = (event) => {
 	const value = Number(event.target.value);
-	update(ref(db), { 'LED/analog': value })
+	update(ref(db), {
+		/* TODO: Add appropriate path as the key and the value you want to set it to */
+	})
 		.then(() => {
 			console.log('LED Analog Write: OK: ON');
 		})

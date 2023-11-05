@@ -3,18 +3,13 @@
 #include <addons/TokenHelper.h>
 #include <addons/RTDBHelper.h>
 
-/*
-RTDB URL: https://esp32-rtdb-tutorial-default-rtdb.firebaseio.com/
-API_KEY: AIzaSyDU7HjH3cAn_2EbQXs7O6JYTRYb1u3WYu0
-*/
+// TODO: Define the following according to your setup
+#define WIFI_SSID ""
+#define WIFI_PASSWORD ""
+#define API_KEY ""
+#define DATABASE_URL ""
 
-// #define WIFI_SSID "ufdevice"
-// #define WIFI_PASSWORD "gogators"
-#define WIFI_SSID "nabilsphone"
-#define WIFI_PASSWORD "12345678"
-#define API_KEY "AIzaSyDU7HjH3cAn_2EbQXs7O6JYTRYb1u3WYu0"
-#define DATABASE_URL "https://esp32-rtdb-tutorial-default-rtdb.firebaseio.com/"
-
+// Feel free to change these pins according to your setup
 #define LED1_PIN 12
 #define LED2_PIN 14
 #define LDR_PIN 36
@@ -34,15 +29,18 @@ float voltage = 0.0;
 int pwmValue = 0;
 bool ledStatus = false;
 
-void setup() {
+void setup()
+{
   pinMode(LED2_PIN, OUTPUT);
   ledcSetup(PWMChannel, freq, resolution);
   ledcAttachPin(LED1_PIN, PWMChannel);
+
   // put your setup code here, to run once:
   Serial.begin(115200);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to WiFi ");
-  while(WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     Serial.print(".");
     delay(500);
   }
@@ -54,11 +52,13 @@ void setup() {
   config.api_key = API_KEY;
   config.database_url = DATABASE_URL;
 
-  if(Firebase.signUp(&config, &auth, "", "")) {
+  if (Firebase.signUp(&config, &auth, "", ""))
+  {
     signupOK = true;
     Serial.println("Sign Up: OK");
   }
-  else {
+  else
+  {
     Serial.printf("@s\n", config.signer.signupError.message.c_str());
   }
 
@@ -67,61 +67,73 @@ void setup() {
   Firebase.begin(&config, &auth);
 }
 
-void loop() {
+void loop()
+{
   // put your main code here, to run repeatedly:
-  if(signupOK && (millis() - sendDataPrevMillis > 30000 || sendDataPrevMillis == 0)) {
+  if (signupOK && (millis() - sendDataPrevMillis > 30000 || sendDataPrevMillis == 0))
+  {
     sendDataPrevMillis = millis();
-    if(Firebase.ready()) {
+    if (Firebase.ready())
+    {
       runFirebaseOperations();
     }
   }
 }
 
-void runFirebaseOperations() {
-  ldrData = analogRead(LDR_PIN);
-  voltage = (float)analogReadMilliVolts(LDR_PIN) / 1000;
+void runFirebaseOperations()
+{
+  ldrData = analogRead(/* TODO: Add correct pin */);
+  voltage = (float)analogReadMilliVolts(/* TODO: Add correct pin */) / 1000;
 
-  if(Firebase.setInt(fbdo, "Sensor/ldr_data", ldrData)) {
+  if (Firebase.setInt(fbdo, /* TODO: Add appropriate path to the LDR value */, ldrData))
+  {
     Serial.println();
     Serial.print(ldrData);
     Serial.print(" - successfully saved to: " + fbdo.dataPath());
     Serial.println(" (" + fbdo.dataType() + ")");
   }
-  else {
+  else
+  {
     Serial.println("FAILED: " + fbdo.errorReason());
   }
 
-  if(Firebase.setFloat(fbdo, "Sensor/voltage", voltage)) {
+  if (Firebase.setFloat(fbdo, /* TODO: Add appropriate path to the LDR voltage */, voltage))
+  {
     Serial.println();
     Serial.print(voltage);
     Serial.print(" - successfully saved to: " + fbdo.dataPath());
     Serial.println(" (" + fbdo.dataType() + ")");
   }
-  else {
+  else
+  {
     Serial.println("FAILED: " + fbdo.errorReason());
   }
 
-  if(Firebase.getInt(fbdo, "LED/analog")) {
-    if(fbdo.dataType() == "int") {
+  if (Firebase.getInt(fbdo, /* TODO: Add appropriate path to the LED analog value */))
+  {
+    if (fbdo.dataType() == "int")
+    {
       pwmValue = fbdo.intData();
       Serial.println("Successful READ from " + fbdo.dataPath() + ": " + pwmValue + " (" + fbdo.dataType() + ")");
       ledcWrite(PWMChannel, pwmValue);
     }
   }
-  else {
+  else
+  {
     Serial.println("FAILED: " + fbdo.errorReason());
   }
 
-  if(Firebase.getBool(fbdo, "LED/digital")) {
-    if(fbdo.dataType() == "boolean") {
+  if (Firebase.getBool(fbdo, /* TODO: Add appropriate path to the LED digital value */))
+  {
+    if (fbdo.dataType() == "boolean")
+    {
       ledStatus = fbdo.boolData();
       Serial.println("Successful READ from " + fbdo.dataPath() + ": " + ledStatus + " (" + fbdo.dataType() + ")");
       digitalWrite(LED2_PIN, ledStatus);
     }
   }
-  else {
+  else
+  {
     Serial.println("FAILED: " + fbdo.errorReason());
   }
 }
-
-
