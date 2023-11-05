@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ESP32 Dashboard</title>
+	</head>
+	<body>
+		<h1>ESP32 Dashboard</h1>
+		<h2>LDR</h2>
+		<p>LDR Value: <span id="ldrValue">N/A</span></p>
+		<p>LDR Voltage: <span id="ldrVoltage">N/A</span></p>
+		<hr />
+		<h2>Analog LED</h2>
+		<p>LED Value: <span id="ledAnalogValue">N/A</span></p>
+		<input type="range" min="0" max="255" step="1" id="ledSlider" />
+		<hr />
+		<h2>Digital LED</h2>
+		<p>LED Value: <span id="ledDigitalValue">N/A</span></p>
+		<button id="ledOn">LED ON</button>
+		<button id="ledOff">LED OFF</button>
+		<script type="module" src="/index.js"></script>
+	</body>
+</html>
